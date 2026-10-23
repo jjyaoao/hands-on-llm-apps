@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "scope": "自编小仓库的四项代码行为问题；课堂开发集，不是隐藏泛化测试集",
+  "format_instruction": "请实际读取源码。最后只输出 JSON 对象，恰好包含 answer、evidence、explanation 三个字段。answer 的字段遵守本题要求；evidence 是非空引用列表，每项为 {\"path\":\"文件名\",\"start\":起始整数行号,\"end\":结束整数行号}，引用必须覆盖支持结论的实际源码。explanation 用简短中文说明条件。不要执行仓库代码。",
+  "tasks": [
+    {"id":"relative-base","question":"未设置 STUDYBOX_CONFIG。answer 中 default_path 填默认路径字符串；relative_base 只能填 process_cwd 或 repository_root，表示默认相对路径基于哪里解析。","expected":{"default_path":"settings.json","relative_base":"process_cwd"},"source":"config.py","required_lines":[8]},
+    {"id":"missing-file","question":"路径所指文件不存在。answer 中 course 和 timeout 分别填返回的课程名和超时整数。","expected":{"course":"大模型应用开发","timeout":30},"source":"config.py","required_lines":[9,10]},
+    {"id":"json-contract","question":"路径存在且内容是任意合法 JSON。answer 中 guaranteed_dict 填布尔值，表示函数是否保证返回字典；filters_keys 填布尔值，表示解析分支是否只保留 course 和 timeout 字段。","expected":{"guaranteed_dict":false,"filters_keys":false},"source":"config.py","required_lines":[11]},
+    {"id":"absolute-env","question":"STUDYBOX_CONFIG 设置为 /tmp/course/settings.json。answer 中 selected_path 填选中的路径；relative_to_cwd 填布尔值，表示这个路径是否仍要相对当前工作目录解析。","expected":{"selected_path":"/tmp/course/settings.json","relative_to_cwd":false},"source":"config.py","required_lines":[8]}
+  ]
+}

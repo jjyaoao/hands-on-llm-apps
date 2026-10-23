@@ -1,0 +1,3766 @@
+{
+  "kind": "real_deepseek_agent_evaluation",
+  "recorded_at": "2026-09-24T05:47:54.029380+00:00",
+  "model": "deepseek-flash",
+  "student_release_note": "历史真实评估的离线实验输入。移除完整模型消息、待执行状态和工作区字段；保留任务、最终回答、实际工具证据、用量与规则评分。源码快照路径映射到学生资料库，历史哈希不变。",
+  "adapted_student_files": [
+    "05 MCP 与 Skills 能力扩展/代码/skills/repo-guide/SKILL.md"
+  ],
+  "max_tokens_per_call": 1000,
+  "automatic_retries": 0,
+  "trials_per_task_variant": 2,
+  "limits": {
+    "max_turns": 4,
+    "max_tools": 8,
+    "context_chars": 18000
+  },
+  "single_change": "回答前逐项核对运行条件：区分源码保证与样例文件；区分相对路径与绝对路径；没有检查的类型和字段不要声称有保证。",
+  "dataset_sha256": "e6ace50ed89586612df164f72ce57804ea63731d639ae64a8d95475f3ecc1c8f",
+  "source_snapshot": {
+    "02 从大模型到 Agent 组成与最小循环/数据/demo-repo/config.py": "98dfc722dd0cdda2276276af59ea3c239bf4e218a5721712e2057817bd702979",
+    "02 从大模型到 Agent 组成与最小循环/数据/demo-repo/main.py": "1482d39ac1a0ad5724f5a0700c60c82d6cd48db71d8960edc849f0c5ccc03b3f",
+    "02 从大模型到 Agent 组成与最小循环/数据/demo-repo/README.md": "b45296e59f38a0d03904c56030dd147b5f5023f31a77a3aa39a5a8379f76102e",
+    "02 从大模型到 Agent 组成与最小循环/数据/demo-repo/settings.json": "32a0d938a933c4fa3bb1467fe87a779944fcee4f4b74d314ce898c01abaff879",
+    "05 MCP 与 Skills 能力扩展/代码/skills/repo-guide/references/conditions.md": "0fb137501bca4559585a0e1c98764a0654ab972fa4bab020eb9181a19c013d14",
+    "05 MCP 与 Skills 能力扩展/代码/skills/repo-guide/SKILL.md": "913890c29fd056e74d464388f862006bae2b05cac7e49c42edc8c657b7282dbc"
+  },
+  "trials": [
+    {
+      "task_id": "relative-base",
+      "repeat": 1,
+      "variant": "base",
+      "state": {
+        "run_id": "02e9f9ae29b64e7080d88cc683264264",
+        "status": "final_answer",
+        "answer": "{\n  \"answer\": {\n    \"default_path\": \"settings.json\",\n    \"relative_base\": \"process_cwd\"\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"config.py\", \"start\": 8, \"end\": 8},\n    {\"path\": \"main.py\", \"start\": 2, \"end\": 7},\n    {\"path\": \"settings.json\", \"start\": 1, \"end\": 1},\n    {\"path\": \"README.md\", \"start\": 5, \"end\": 7}\n  ],\n  \"explanation\": \"main.py 第2行导入 config.load_settings，第6行在 main() 中调用它，所以调用关系是 main.py:main → config.load_settings。config.py 第8行用 os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\") 取路径：未设置该环境变量时回退到字面量字符串 \\\"settings.json\\\"，即默认路径就是 settings.json，而不是任何绝对路径。该字符串随后被传给 Path(...)，成为一个相对路径；相对路径在 Python 中由进程当前工作目录（process_cwd）解析，所以是相对 cwd 而非仓库根目录——仓库代码里没有任何把基准目录固定为仓库根的语句（无 __file__ 或 os.chdir 之类操作）。第9行检查 path.exists()：文件存在（此处 settings.json 确实存在，见其第1行内容）就执行第11行读取并 json.loads 解析；不存在则第10行返回内置默认字典 {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}，此时 main.py 第7行打印的欢迎语用的是 \\\"大模型应用开发\\\"，而不是 settings.json 里的 \\\"动手学大模型应用开发\\\"。因此从不同工作目录运行 main.py，可能读到不同的文件或直接落入兜底分支。另外要注意：我只读取了资料，没有执行任何仓库代码，上述结论来自静态阅读。可以回到源码自行验证的问题：从仓库根目录以不同的工作目录运行 main.py，settings['course'] 的取值会变成什么？这取决于第8行的 Path 相对哪一级目录解析。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 821,
+            "completion_tokens": 65,
+            "total_tokens": 886,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 181
+          },
+          {
+            "prompt_tokens": 1421,
+            "completion_tokens": 140,
+            "total_tokens": 1561,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 653
+          },
+          {
+            "prompt_tokens": 2866,
+            "completion_tokens": 482,
+            "total_tokens": 3348,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1714
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 821,
+          "completion_tokens": 65,
+          "total_tokens": 886,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 181
+        },
+        {
+          "prompt_tokens": 1421,
+          "completion_tokens": 140,
+          "total_tokens": 1561,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 653
+        },
+        {
+          "prompt_tokens": 2866,
+          "completion_tokens": 482,
+          "total_tokens": 3348,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1714
+        }
+      ],
+      "elapsed_seconds": 17.9644,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_H7DrwgiiElNm2Iuh7Img5433",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_alI8smQcbQOEynHjBLR33294",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_6DW5SiWu8705wfVRhu6i9528",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_Woge8yttWecVJ3nQFEJb4692",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_N5m3y79iqewXBTPuFtY53562",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_lg266gu3rjK5sXjS6qNM8763",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "relative-base",
+      "repeat": 1,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "d797513f3e6041ec9db8f742675b8029",
+        "status": "final_answer",
+        "answer": "{\"answer\":{\"default_path\":\"settings.json\",\"relative_base\":\"process_cwd\"},\"evidence\":[{\"path\":\"config.py\",\"start\":7,\"end\":11},{\"path\":\"settings.json\",\"start\":1,\"end\":1},{\"path\":\"main.py\",\"start\":5,\"end\":7}],\"explanation\":\"未设置 STUDYBOX_CONFIG 时，config.py 第8行用 os.environ.get 取默认值字符串 \\\"settings.json\\\"，这是一个相对路径，未与任何仓库目录拼接；相对路径由 Path 在打开时基于进程当前工作目录（process_cwd）解析，源码中没有基于仓库根目录（如 __file__）的定位逻辑。该路径存在时（settings.json 第1行）按第11行读取并 json.loads；只有路径不存在时第9-10行才返回内置字典 {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}，因此内部默认值与文件内容 \\\"动手学大模型应用开发\\\"/15 不同。main.py 第6行调用 load_settings，第7行用 settings['course'] 生成欢迎语；源码未校验 timeout 等字段，也未规定缺失字段时的行为。可自行验证：在仓库根目录运行时——settings.json 会被读到；若从其它目录运行 main.py，这条相对路径可能指向别处甚至不存在，从而落到第10行的内置默认值。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 853,
+            "completion_tokens": 69,
+            "total_tokens": 922,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 213
+          },
+          {
+            "prompt_tokens": 1457,
+            "completion_tokens": 144,
+            "total_tokens": 1601,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 177
+          },
+          {
+            "prompt_tokens": 2906,
+            "completion_tokens": 293,
+            "total_tokens": 3199,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1754
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 853,
+          "completion_tokens": 69,
+          "total_tokens": 922,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 213
+        },
+        {
+          "prompt_tokens": 1457,
+          "completion_tokens": 144,
+          "total_tokens": 1601,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 177
+        },
+        {
+          "prompt_tokens": 2906,
+          "completion_tokens": 293,
+          "total_tokens": 3199,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1754
+        }
+      ],
+      "elapsed_seconds": 16.8013,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_8hOJ5oCqVgjpJTHCykrC8180",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_UFgMRi9QvnKRHKZ4BRhJ5227",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_Qso0KlnwaNiC1Q3GfLge8535",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_6Hse0w4PXw4K1VGp7mOR9854",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_A1ZeAV3Ryf5NMqLGQiuN4418",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_jJBXtpg5cSJy909BY1DP0025",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "missing-file",
+      "repeat": 1,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "f99aeadfd9ee433493ae96452c94f076",
+        "status": "final_answer",
+        "answer": "{\"answer\": {\"course\": \"动手学大模型应用开发\", \"timeout\": 15}, \"evidence\": [{\"path\": \"main.py\", \"start\": 5, \"end\": 7}, {\"path\": \"config.py\", \"start\": 7, \"end\": 11}, {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}], \"explanation\": \"main.py 第 5-7 行调用 load_settings() 并打印 settings['course']。config.py 第 8 行用 STUDYBOX_CONFIG 环境变量取路径，未设置时默认相对路径 settings.json；第 9-10 行仅在文件不存在时返回兜底值 course='大模型应用开发'、timeout=30，第 11 行在文件存在时读取并解析 JSON。本仓库 settings.json 实际存在（第 1 行，内容为 course='动手学大模型应用开发'、timeout=15），因此走第 11 行分支，兜底值不生效。故 course 取文件中的课程名，timeout 为 15 而非 30。注意：默认路径 'settings.json' 是相对当前工作目录解析的，且未在源码中读取 STUDYBOX_CONFIG，仅说明环境变量未被设置时的情形。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 839,
+            "completion_tokens": 69,
+            "total_tokens": 908,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 199
+          },
+          {
+            "prompt_tokens": 1443,
+            "completion_tokens": 148,
+            "total_tokens": 1591,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 675
+          },
+          {
+            "prompt_tokens": 2896,
+            "completion_tokens": 282,
+            "total_tokens": 3178,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1744
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 839,
+          "completion_tokens": 69,
+          "total_tokens": 908,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 199
+        },
+        {
+          "prompt_tokens": 1443,
+          "completion_tokens": 148,
+          "total_tokens": 1591,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 675
+        },
+        {
+          "prompt_tokens": 2896,
+          "completion_tokens": 282,
+          "total_tokens": 3178,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1744
+        }
+      ],
+      "elapsed_seconds": 17.039,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_ptZVJu8qP4kOTxX90xOB0795",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_veBuWM54NwbVoQFXR3n09963",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_djD5lFJOp4IYODYmszO95382",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_8LVjLVH1gADK9EWo8V5N0233",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_BddaqYtpejDuKxiQMnW82152",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_ckXgmIfG7Ld0ujwfBkKm8601",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": false,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": false,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [
+          "facts"
+        ],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "missing-file",
+      "repeat": 1,
+      "variant": "base",
+      "state": {
+        "run_id": "6cc6922d32f046ce88b5061061b4e023",
+        "status": "final_answer",
+        "answer": "I read the actual source. The chain is: `main()` (main.py:5-7) → `load_settings()` (config.py:7-11) → path resolved from env var `STUDYBOX_CONFIG`, default `settings.json` (config.py:8) → since `settings.json` exists, it is read (config.py:11).\n\nSince `settings.json` exists in the repository, the default-value branch at config.py:10 does not apply, and the values come from `{\"course\": \"动手学大模型应用开发\", \"timeout\": 15}` (settings.json:1).\n\n```json\n{\n  \"answer\": {\n    \"course\": \"动手学大模型应用开发\",\n    \"timeout\": 15\n  },\n  \"evidence\": [\n    {\"path\": \"main.py\", \"start\": 5, \"end\": 7},\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}\n  ],\n  \"explanation\": \"main() 调用 load_settings()；它按 STUDYBOX_CONFIG 环境变量取路径，未设置时用默认的 settings.json。仓库中 settings.json 实际存在，所以走 config.py:11 的读取分支，返回 {\"course\": \"动手学大模型应用开发\", \"timeout\": 15}；config.py:10 的兜底默认值（course 大模型应用开发、timeout 30）只有在文件不存在时才生效。可自行验证：若把 STUDYBOX_CONFIG 指向一个不存在的文件，返回的 timeout 会变成 30。\"\n}\n```",
+        "usage": [
+          {
+            "prompt_tokens": 807,
+            "completion_tokens": 69,
+            "total_tokens": 876,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 167
+          },
+          {
+            "prompt_tokens": 1411,
+            "completion_tokens": 151,
+            "total_tokens": 1562,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 259
+          },
+          {
+            "prompt_tokens": 2867,
+            "completion_tokens": 356,
+            "total_tokens": 3223,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1715
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 807,
+          "completion_tokens": 69,
+          "total_tokens": 876,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 167
+        },
+        {
+          "prompt_tokens": 1411,
+          "completion_tokens": 151,
+          "total_tokens": 1562,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 259
+        },
+        {
+          "prompt_tokens": 2867,
+          "completion_tokens": 356,
+          "total_tokens": 3223,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1715
+        }
+      ],
+      "elapsed_seconds": 17.038,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_I66gHjqCiXGCQchfEwDq7065",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_yNktmRUlyi8lbkPwY56t5465",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_yCO60COCfOxL7MVOUdSX0447",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_JrQ3i6zqH5rXdN2hnRY51859",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_SpS1z2gAfBjpR1thGrnI2851",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_KeEm2p7dJuPHnQwDSmL98483",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": false,
+        "checks": {
+          "completed": true,
+          "schema": false,
+          "facts": false,
+          "citations": false,
+          "source_unchanged": true
+        },
+        "failed_checks": [
+          "未得到要求的 JSON 结构",
+          "schema",
+          "facts",
+          "citations"
+        ],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "json-contract",
+      "repeat": 1,
+      "variant": "base",
+      "state": {
+        "run_id": "1bdc1fc99c774c0ab00d288cba23ce1e",
+        "status": "final_answer",
+        "answer": "{\"answer\":{\"guaranteed_dict\":false,\"filters_keys\":false},\"evidence\":[{\"path\":\"config.py\",\"start\":7,\"end\":11},{\"path\":\"config.py\",\"start\":8,\"end\":8},{\"path\":\"config.py\",\"start\":9,\"end\":10},{\"path\":\"config.py\",\"start\":11,\"end\":11},{\"path\":\"main.py\",\"start\":5,\"end\":7},{\"path\":\"settings.json\",\"start\":1,\"end\":1}],\"explanation\":\"load_settings 有两个分支：文件不存在时返回硬编码字典（config.py:9-10），保证是 dict；文件存在时直接 json.loads 解析文件内容并原样返回（config.py:8、11），没有做类型检查或键过滤，所以合法 JSON 也可能是数组、字符串、数字或 null，不保证是字典，也不保证只含 course 和 timeout。仓库自带的 settings.json 恰好是含这两个键的对象，但那是数据而非函数保证。调用方 main()（main.py:5-7）直接用 settings['course'] 下标访问，依赖返回值为字典。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 829,
+            "completion_tokens": 69,
+            "total_tokens": 898,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 189
+          },
+          {
+            "prompt_tokens": 1433,
+            "completion_tokens": 140,
+            "total_tokens": 1573,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 153
+          },
+          {
+            "prompt_tokens": 2878,
+            "completion_tokens": 232,
+            "total_tokens": 3110,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1726
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 829,
+          "completion_tokens": 69,
+          "total_tokens": 898,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 189
+        },
+        {
+          "prompt_tokens": 1433,
+          "completion_tokens": 140,
+          "total_tokens": 1573,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 153
+        },
+        {
+          "prompt_tokens": 2878,
+          "completion_tokens": 232,
+          "total_tokens": 3110,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1726
+        }
+      ],
+      "elapsed_seconds": 16.4658,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_ang0pDU5OjeI70VgfV1Q1892",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_CJBVWLEk6iCuyhQlOnMW7420",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_AjLcBVvB8HrNawq0ZxFa9219",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_slJf86DpvCe5lvcmT3u10525",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_uGONduYXU0YvPi2JPHUZ6493",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_G7CojLuZYTXF1kCDOFVV5630",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "json-contract",
+      "repeat": 1,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "7c9d66bdad7042ccbe2c72b08ed76bb6",
+        "status": "final_answer",
+        "answer": "```json\n{\n  \"answer\": {\n    \"guaranteed_dict\": true,\n    \"filters_keys\": false\n  },\n  \"evidence\": [\n    {\"path\": \"main.py\", \"start\": 2, \"end\": 2},\n    {\"path\": \"main.py\", \"start\": 5, \"end\": 11},\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}\n  ],\n  \"explanation\": \"main.py 第5-7行调用并读取 settings['course']，配置来自 config.py 的 load_settings。config.py 第8行用 Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\")) 取路径：相对/绝对路径都可。第9-10行当路径不存在时返回含 course、timeout 的字面字典；第11行路径存在时直接返回 json.loads(...) 的结果。因此函数一定返回字典（json.loads 也可产生 list、数字、字符串等，但题目给定 JSON 内容任意合法情况下仍可能不是字典——严格说，json.loads 可返回非字典类型如数组，所以\\\"保证返回字典\\\"只在不存在分支成立）。说明：本文件 settings.json 第1行确实是 JSON 对象且有这两个字段，实现未做任何键过滤；但若外部路径内容为其他合法 JSON（如数组），第11行会返回该类型，故 filters_keys 为 false，而 guaranteed_dict 在源码层面并非绝对保证。\"\n}\n```",
+        "usage": [
+          {
+            "prompt_tokens": 861,
+            "completion_tokens": 65,
+            "total_tokens": 926,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 221
+          },
+          {
+            "prompt_tokens": 1461,
+            "completion_tokens": 143,
+            "total_tokens": 1604,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 693
+          },
+          {
+            "prompt_tokens": 2909,
+            "completion_tokens": 343,
+            "total_tokens": 3252,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1757
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 861,
+          "completion_tokens": 65,
+          "total_tokens": 926,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 221
+        },
+        {
+          "prompt_tokens": 1461,
+          "completion_tokens": 143,
+          "total_tokens": 1604,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 693
+        },
+        {
+          "prompt_tokens": 2909,
+          "completion_tokens": 343,
+          "total_tokens": 3252,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1757
+        }
+      ],
+      "elapsed_seconds": 17.288,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_uf30S6DbiKl0p5W44bLJ9244",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_FXQu9tVhnpHWEhVw5Swm5945",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_toZfGTxUEqUrBCZcQzek3127",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_Kj1YQVSWhd5sAfINUoud5092",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_ZDxxH4CRyfqbarQdkYJh5142",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_jmsnntJAbL3Wf2W9K51E6001",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": false,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": false,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [
+          "facts"
+        ],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "absolute-env",
+      "repeat": 1,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "c7674ce94cf7468bb486787bc48cdd8f",
+        "status": "final_answer",
+        "answer": "{\n  \"answer\": {\n    \"selected_path\": \"/tmp/course/settings.json\",\n    \"relative_to_cwd\": false\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"config.py\", \"start\": 8, \"end\": 8},\n    {\"path\": \"main.py\", \"start\": 5, \"end\": 6},\n    {\"path\": \"README.md\", \"start\": 6, \"end\": 7}\n  ],\n  \"explanation\": \"main.py:6 调用 load_settings，config.py:8 用 os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\") 取路径。该值已被设为 /tmp/course/settings.json，是绝对路径，所以选中它就是该绝对路径；Path 对绝对路径不会再拼接当前工作目录，因此 relative_to_cwd 为 false。默认值 settings.json 才属于相对路径。\"\n}",
+        "usage": [
+          {
+            "prompt_tokens": 862,
+            "completion_tokens": 69,
+            "total_tokens": 931,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 222
+          },
+          {
+            "prompt_tokens": 1466,
+            "completion_tokens": 148,
+            "total_tokens": 1614,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 186
+          },
+          {
+            "prompt_tokens": 2919,
+            "completion_tokens": 214,
+            "total_tokens": 3133,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1767
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 862,
+          "completion_tokens": 69,
+          "total_tokens": 931,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 222
+        },
+        {
+          "prompt_tokens": 1466,
+          "completion_tokens": 148,
+          "total_tokens": 1614,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 186
+        },
+        {
+          "prompt_tokens": 2919,
+          "completion_tokens": 214,
+          "total_tokens": 3133,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1767
+        }
+      ],
+      "elapsed_seconds": 16.0885,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_QeANdXfU42PD9T3XFKSY3801",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_5Vw0mBhuJjuXJf8H9n5A0885",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_hc0JYLOrocDqTeeEm4oL7459",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_q6B9TFwiH9b70H4Sy3EI0053",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_A9KdkLbu0YldodQGWvXj6143",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_4g2j3tffjDqwtjmCSOtc4033",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "absolute-env",
+      "repeat": 1,
+      "variant": "base",
+      "state": {
+        "run_id": "ed718a613a7a45c8ab74eeeccf2d6ac0",
+        "status": "final_answer",
+        "answer": "```json\n{\n  \"answer\": {\n    \"selected_path\": \"/tmp/course/settings.json\",\n    \"relative_to_cwd\": false\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"main.py\", \"start\": 5, \"end\": 7},\n    {\"path\": \"README.md\", \"start\": 5, \"end\": 7}\n  ],\n  \"explanation\": \"调用关系：main.py:6 的 main() 调用 config.load_settings()（main.py:2 导入）。config.py:8 用 Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\")) 取路径：环境变量存在时直接返回其值。当 STUDYBOX_CONFIG=/tmp/course/settings.json 时，选中路径就是该值；因为它是绝对路径（以 / 开头），Path 不会把它与当前工作目录拼接，所以 relative_to_cwd 为 false。随后 config.py:9 检查是否存在：不存在返回内置默认字典，存在则读取并 json.loads。\"\n}\n```",
+        "usage": [
+          {
+            "prompt_tokens": 830,
+            "completion_tokens": 69,
+            "total_tokens": 899,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 190
+          },
+          {
+            "prompt_tokens": 1434,
+            "completion_tokens": 150,
+            "total_tokens": 1584,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 282
+          },
+          {
+            "prompt_tokens": 2889,
+            "completion_tokens": 243,
+            "total_tokens": 3132,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1737
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 830,
+          "completion_tokens": 69,
+          "total_tokens": 899,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 190
+        },
+        {
+          "prompt_tokens": 1434,
+          "completion_tokens": 150,
+          "total_tokens": 1584,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 282
+        },
+        {
+          "prompt_tokens": 2889,
+          "completion_tokens": 243,
+          "total_tokens": 3132,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1737
+        }
+      ],
+      "elapsed_seconds": 16.3126,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_qncbh2NEHoiNNaJoCE4C2127",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_sQmCbrC6Af9qwf6Wa7et3328",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_IeRqR9lma1Mhu4TKpPKB4623",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_RKKEPNDQg3YEgXidxiyN8462",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_Q68CIJYRaZzMAyls7OVM2265",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_liALonq2u1kT6QJjaVaq3515",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "relative-base",
+      "repeat": 2,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "3ead6e85e9f044e6a33d9f29fb4e8eee",
+        "status": "final_answer",
+        "answer": "{\"answer\":{\"default_path\":\"settings.json\",\"relative_base\":\"process_cwd\"},\"evidence\":[{\"path\":\"config.py\",\"start\":8,\"end\":11},{\"path\":\"main.py\",\"start\":5,\"end\":7},{\"path\":\"main.py\",\"start\":10,\"end\":11},{\"path\":\"settings.json\",\"start\":1,\"end\":1}],\"explanation\":\"未设置 STUDYBOX_CONFIG 时，config.py 第8行 os.environ.get 取回退值字符串 \\\"settings.json\\\"，交给 pathlib.Path 构造相对路径，因此 default_path 是 settings.json。Path 相对路径按进程当前工作目录（process_cwd）解析，而非仓库根目录：源码中没有出现 __file__、脚本目录或仓库根目录拼接，第9行只用 path.exists() 做存在性检查，所以答案只能是 process_cwd。若进程 cwd 恰好是仓库根目录，会命中 settings.json（第1行 course 为“动手学大模型应用开发”）；否则第9-10行返回内置默认字典 course=\\\"大模型应用开发\\\"，并由 main.py 第6-7行打印欢迎语。注意源码只保证读取 course 字段的用法，仓库未检查 timeout 等其它字段。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 853,
+            "completion_tokens": 67,
+            "total_tokens": 920,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 213
+          },
+          {
+            "prompt_tokens": 1455,
+            "completion_tokens": 148,
+            "total_tokens": 1603,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 687
+          },
+          {
+            "prompt_tokens": 2908,
+            "completion_tokens": 261,
+            "total_tokens": 3169,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1756
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 853,
+          "completion_tokens": 67,
+          "total_tokens": 920,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 213
+        },
+        {
+          "prompt_tokens": 1455,
+          "completion_tokens": 148,
+          "total_tokens": 1603,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 687
+        },
+        {
+          "prompt_tokens": 2908,
+          "completion_tokens": 261,
+          "total_tokens": 3169,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1756
+        }
+      ],
+      "elapsed_seconds": 16.9519,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_j6IE2YPOx69XKRsct3wS0552",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_0SQbnqTCwMYC0DUSVvkn3318",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_J62d6kN2JLihesBrM89m4806",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_wk0Ff9qERzHtYK7xrs1l8901",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_79EjfQbtYfuFDbARljQ57628",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_toh6AYVOhlRu2W1h7B3T6788",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "relative-base",
+      "repeat": 2,
+      "variant": "base",
+      "state": {
+        "run_id": "9e2a7edb760c417c919681d8485d9b08",
+        "status": "final_answer",
+        "answer": "{\n  \"answer\": {\n    \"default_path\": \"settings.json\",\n    \"relative_base\": \"process_cwd\"\n  },\n  \"evidence\": [\n    {\n      \"path\": \"config.py\",\n      \"start\": 7,\n      \"end\": 11\n    },\n    {\n      \"path\": \"settings.json\",\n      \"start\": 1,\n      \"end\": 1\n    },\n    {\n      \"path\": \"main.py\",\n      \"start\": 2,\n      \"end\": 11\n    }\n  ],\n  \"explanation\": \"config.py 第 8 行用 os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\") 取路径：未设置环境变量时默认值为相对路径 settings.json。该字符串是裸相对路径，未与任何仓库目录拼接，Path 会相对于进程当前工作目录解析，因此 relative_base 为 process_cwd。若该路径不存在，第 9-10 行返回内置默认 dict（course 为“大模型应用开发”）；存在时第 11 行按 UTF-8 读取并用 json.loads 解析，此时读到的 course 来自 settings.json 第 1 行的“动手学大模型应用开发”。main.py 第 2 行导入 load_settings，第 6 行调用它，第 7 行打印 settings['course']。可自行验证的问题：从上级目录运行 main.py 时，config.py 第 8 行会去哪个目录找 settings.json？\"\n}",
+        "usage": [
+          {
+            "prompt_tokens": 821,
+            "completion_tokens": 70,
+            "total_tokens": 891,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 181
+          },
+          {
+            "prompt_tokens": 1426,
+            "completion_tokens": 143,
+            "total_tokens": 1569,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 658
+          },
+          {
+            "prompt_tokens": 2874,
+            "completion_tokens": 325,
+            "total_tokens": 3199,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1722
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 821,
+          "completion_tokens": 70,
+          "total_tokens": 891,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 181
+        },
+        {
+          "prompt_tokens": 1426,
+          "completion_tokens": 143,
+          "total_tokens": 1569,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 658
+        },
+        {
+          "prompt_tokens": 2874,
+          "completion_tokens": 325,
+          "total_tokens": 3199,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1722
+        }
+      ],
+      "elapsed_seconds": 16.79,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_Nfcf5rEY9pKhxT8KuuGT4101",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_typNkalpA4EI3vZ9p00v1905",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_ipHHqvlAFpTA0Hl6ILxQ2048",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_pDutLuTQFTxjJVnUouCB4858",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_Nk6zczlQuYfTEOhuKDbt8216",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_pA9NTxT6gOY1ZkBwbAPD0268",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "missing-file",
+      "repeat": 2,
+      "variant": "base",
+      "state": {
+        "run_id": "78260aa4271746e8bcea74655b8f9f22",
+        "status": "final_answer",
+        "answer": "{\"answer\": {\"course\": \"动手学大模型应用开发\", \"timeout\": 15}, \"evidence\": [{\"path\": \"main.py\", \"start\": 2, \"end\": 7}, {\"path\": \"config.py\", \"start\": 7, \"end\": 11}, {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}], \"explanation\": \"入口 main.py 第2行从 config 导入 load_settings，第6行调用它，第7行读取返回字典的 course 键。config.py 第8行用 STUDYBOX_CONFIG 环境变量取路径、缺省 settings.json；第9-10行仅当该路径不存在时才返回兜底字典（course=大模型应用开发, timeout=30）；否则第11行走 settings.json。本仓库 settings.json 存在，因此走到第11行，返回其内容：course=动手学大模型应用开发，timeout=15。未执行任何代码，结论基于静态读取。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 807,
+            "completion_tokens": 69,
+            "total_tokens": 876,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 167
+          },
+          {
+            "prompt_tokens": 1411,
+            "completion_tokens": 141,
+            "total_tokens": 1552,
+            "prompt_tokens_details": {
+              "cached_tokens": 1277
+            },
+            "prompt_cache_hit_tokens": 1277,
+            "prompt_cache_miss_tokens": 134
+          },
+          {
+            "prompt_tokens": 2857,
+            "completion_tokens": 216,
+            "total_tokens": 3073,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1705
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 807,
+          "completion_tokens": 69,
+          "total_tokens": 876,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 167
+        },
+        {
+          "prompt_tokens": 1411,
+          "completion_tokens": 141,
+          "total_tokens": 1552,
+          "prompt_tokens_details": {
+            "cached_tokens": 1277
+          },
+          "prompt_cache_hit_tokens": 1277,
+          "prompt_cache_miss_tokens": 134
+        },
+        {
+          "prompt_tokens": 2857,
+          "completion_tokens": 216,
+          "total_tokens": 3073,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1705
+        }
+      ],
+      "elapsed_seconds": 16.3987,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_K0yTMmZ4MxIAgf5cMQXu9637",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_JhY2i3hDdVZ94CT0fahW1970",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_IWCUEdEgLszoEPq4Uel15302",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_qPPhn3wqwUXQyMGMRNgm9119",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_3SoRDaFwZJLxQkaZPzid6336",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_hbvhYb8cv2yXWgQ1PNXb3262",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": false,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": false,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [
+          "facts"
+        ],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "missing-file",
+      "repeat": 2,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "4a8acfe265f448c59d3719cf2b4a88ae",
+        "status": "tool_budget",
+        "answer": "",
+        "usage": [
+          {
+            "prompt_tokens": 839,
+            "completion_tokens": 68,
+            "total_tokens": 907,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 199
+          },
+          {
+            "prompt_tokens": 1442,
+            "completion_tokens": 141,
+            "total_tokens": 1583,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 674
+          },
+          {
+            "prompt_tokens": 2888,
+            "completion_tokens": 166,
+            "total_tokens": 3054,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1736
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 8
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 839,
+          "completion_tokens": 68,
+          "total_tokens": 907,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 199
+        },
+        {
+          "prompt_tokens": 1442,
+          "completion_tokens": 141,
+          "total_tokens": 1583,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 674
+        },
+        {
+          "prompt_tokens": 2888,
+          "completion_tokens": 166,
+          "total_tokens": 3054,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1736
+        }
+      ],
+      "elapsed_seconds": 20.081,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_6vPpqfQy7COEkmINZBmJ3636",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_epGj5TCZJR8JbAJdecMt5091",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_QnHL8CCMCnjegTIvIaRQ7096",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_iXaIPZMnspgBzV711xRS6480",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_punxw00Zjj7TnRiLM9HQ9792",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_xvzXAsVTvLPaE5Gp9uwC2379",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_kwT1HvlQjc7bazIZCS1y1560",
+          "id": "95a1609967f2203ba795f76e10e3347bc4f292cf5aa01229b357b108fca2a9dd",
+          "size_bytes": 647,
+          "sha256": "95a1609967f2203ba795f76e10e3347bc4f292cf5aa01229b357b108fca2a9dd",
+          "body": {
+            "ok": true,
+            "text": "# 条件核验清单\n\n- 区分变量未设置、变量为空、文件不存在、文件内容非法；只解释源码实际覆盖的分支。\n- 遇到相对路径，寻找是否显式拼接目录或改变进程工作目录；证据不足时说明已知的路径表达式和待确认的运行条件。\n- 默认值只属于触发它的条件，不要当成所有配置的固定值。\n- 读取 JSON 不自动意味着过滤字段。检查是否有显式键选择、校验或合并逻辑。\n- 静态读源码与实际运行分开表述。没有执行记录时，用“按这段代码”而不是“已经运行证明”。\n"
+          }
+        },
+        {
+          "call_id": "call_01_1Yhkv0R6ejx6JpnEwoGR8420",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": false,
+        "checks": {
+          "completed": false,
+          "schema": false,
+          "facts": false,
+          "citations": false,
+          "source_unchanged": true
+        },
+        "failed_checks": [
+          "未得到要求的 JSON 结构",
+          "completed",
+          "schema",
+          "facts",
+          "citations"
+        ],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "json-contract",
+      "repeat": 2,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "2d3045ef39984b0bb2866672e23dda02",
+        "status": "final_answer",
+        "answer": "{\"answer\": {\"guaranteed_dict\": false, \"filters_keys\": false}, \"evidence\": [{\"path\": \"config.py\", \"start\": 7, \"end\": 11}, {\"path\": \"config.py\", \"start\": 8, \"end\": 8}, {\"path\": \"config.py\", \"start\": 9, \"end\": 10}, {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}], \"explanation\": \"config.py:7-11 的 load_settings 只在文件不存在时（config.py:9-10）返回字面字典；文件存在时（config.py:11）直接把 json.loads 的结果原样返回，因此返回值类型取决于 JSON 内容——题目声明 settings.json 内容是任意合法 JSON，可能是列表、数字或字符串，所以不保证返回字典。同时两种分支都不做字段过滤：json.loads 的整个对象被返回，没有只挑 course 和 timeout；settings.json:1 恰好含 course 与 timeout 是样例文件内容，不是函数保证。欢迎消息 settings['course']（main.py:7）只在拿到字典时可用，属未检查的假设。\"}",
+        "usage": [
+          {
+            "prompt_tokens": 861,
+            "completion_tokens": 69,
+            "total_tokens": 930,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 221
+          },
+          {
+            "prompt_tokens": 1465,
+            "completion_tokens": 133,
+            "total_tokens": 1598,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 185
+          },
+          {
+            "prompt_tokens": 2903,
+            "completion_tokens": 254,
+            "total_tokens": 3157,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1751
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 861,
+          "completion_tokens": 69,
+          "total_tokens": 930,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 221
+        },
+        {
+          "prompt_tokens": 1465,
+          "completion_tokens": 133,
+          "total_tokens": 1598,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 185
+        },
+        {
+          "prompt_tokens": 2903,
+          "completion_tokens": 254,
+          "total_tokens": 3157,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1751
+        }
+      ],
+      "elapsed_seconds": 16.7273,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_gmE8bTFdsiCfY4UBlC945455",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_IGxALQr6azP33Sn8jdlX4482",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_yCHQaPvGdJhJStWGJ3dx8501",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_okyarcX20GTqxiGER2S33722",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_tYrqV9eLzxEKkjvRy40W1869",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_Jxw32aaUVc0cwLIoptvB7198",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "json-contract",
+      "repeat": 2,
+      "variant": "base",
+      "state": {
+        "run_id": "14f5aa1a006146deb78185fc4a460744",
+        "status": "final_answer",
+        "answer": "{\n  \"answer\": {\n    \"guaranteed_dict\": false,\n    \"filters_keys\": false\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"config.py\", \"start\": 8, \"end\": 8},\n    {\"path\": \"config.py\", \"start\": 9, \"end\": 10},\n    {\"path\": \"main.py\", \"start\": 5, \"end\": 7},\n    {\"path\": \"settings.json\", \"start\": 1, \"end\": 1}\n  ],\n  \"explanation\": \"load_settings 有两个返回分支：文件不存在时返回写死的字典（config.py 第9-10行），这一支保证是字典；但文件存在时走 json.loads(path.read_text(...))（第11行），其返回值取决于 JSON 文本的实际内容，函数本身不校验或强制转换类型，因此整体不能保证返回字典（例如 settings.json 若被改成数组或字符串，返回值就不是字典）。解析分支也没有任何键名白名单或过滤：第11行直接把 JSON 解析结果原样返回，JSON 里有什么键就保留什么键，并不只保留 course 和 timeout，故 filters_keys 为 false。\"\n}",
+        "usage": [
+          {
+            "prompt_tokens": 829,
+            "completion_tokens": 73,
+            "total_tokens": 902,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 189
+          },
+          {
+            "prompt_tokens": 1437,
+            "completion_tokens": 143,
+            "total_tokens": 1580,
+            "prompt_tokens_details": {
+              "cached_tokens": 768
+            },
+            "prompt_cache_hit_tokens": 768,
+            "prompt_cache_miss_tokens": 669
+          },
+          {
+            "prompt_tokens": 2885,
+            "completion_tokens": 276,
+            "total_tokens": 3161,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1733
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 829,
+          "completion_tokens": 73,
+          "total_tokens": 902,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 189
+        },
+        {
+          "prompt_tokens": 1437,
+          "completion_tokens": 143,
+          "total_tokens": 1580,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 669
+        },
+        {
+          "prompt_tokens": 2885,
+          "completion_tokens": 276,
+          "total_tokens": 3161,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1733
+        }
+      ],
+      "elapsed_seconds": 16.5233,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_NdZmZRgOt2CSdsMORvbB7001",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_GhElGo921n7oC0DzjTR21456",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_B1xgfqywwy77RH8QtVOr4660",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_AsVXifhhwbU4PlGSSvkW5952",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_crTBbnkgFp2G0OttXdRY3362",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_bhWzbirG1EENs4At85d98057",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "absolute-env",
+      "repeat": 2,
+      "variant": "base",
+      "state": {
+        "run_id": "838211c954904f63bd15f60ee3cac15c",
+        "status": "final_answer",
+        "answer": "```json\n{\n  \"answer\": {\n    \"selected_path\": \"/tmp/course/settings.json\",\n    \"relative_to_cwd\": false\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 7, \"end\": 11},\n    {\"path\": \"main.py\", \"start\": 2, \"end\": 7},\n    {\"path\": \"settings.json\", \"start\": 1, \"end\": 1},\n    {\"path\": \"README.md\", \"start\": 5, \"end\": 7}\n  ],\n  \"explanation\": \"main.py 第6行调用 load_settings，实现在 config.py 第8行：用 os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\") 取路径。环境变量已设为 /tmp/course/settings.json，get 返回该值而非默认值 \\\"settings.json\\\"。因为该值是绝对路径，Path 已指向唯一位置，不再相对当前工作目录解析，所以相对路径的默认分支（同目录下的 settings.json）被跳过。第9行仅在路径不存在时返回内置字典，与路径是否相对无关。\"\n}\n```",
+        "usage": [
+          {
+            "prompt_tokens": 830,
+            "completion_tokens": 69,
+            "total_tokens": 899,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 190
+          },
+          {
+            "prompt_tokens": 1434,
+            "completion_tokens": 151,
+            "total_tokens": 1585,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 154
+          },
+          {
+            "prompt_tokens": 2890,
+            "completion_tokens": 248,
+            "total_tokens": 3138,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1738
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 830,
+          "completion_tokens": 69,
+          "total_tokens": 899,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 190
+        },
+        {
+          "prompt_tokens": 1434,
+          "completion_tokens": 151,
+          "total_tokens": 1585,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 154
+        },
+        {
+          "prompt_tokens": 2890,
+          "completion_tokens": 248,
+          "total_tokens": 3138,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1738
+        }
+      ],
+      "elapsed_seconds": 16.9562,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_Fb0EvFMoPh2YppNfhmnO1776",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_YfZryKFuaLyJaadhaVyL0446",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_EWVJSyaWjg5VSnmT0ffX3598",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_UKHahqwoIcTf7Yw4qiK55777",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_tr1JDy81KiIbLFhwR2oe5900",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_pSFTIfoc1LDIYmoizlct5368",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    },
+    {
+      "task_id": "absolute-env",
+      "repeat": 2,
+      "variant": "condition_check",
+      "state": {
+        "run_id": "d9fb74758e24434bae21152d93e55eb4",
+        "status": "final_answer",
+        "answer": "{\n  \"answer\": {\n    \"selected_path\": \"/tmp/course/settings.json\",\n    \"relative_to_cwd\": false\n  },\n  \"evidence\": [\n    {\"path\": \"config.py\", \"start\": 8, \"end\": 11},\n    {\"path\": \"main.py\", \"start\": 2, \"end\": 7}\n  ],\n  \"explanation\": \"main.py 第2行导入 load_settings，第6行调用它。config.py 第8行用 os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\") 取路径；设置了该环境变量时，值为 /tmp/course/settings.json，这是一个绝对路径，Path 直接按绝对路径解析，不再相对当前工作目录，因此 relative_to_cwd 为 false。第9行判断路径存在则读取：绝对路径 /tmp/course/settings.json 若存在，第11行返回其内容（默认值分支不生效）；若无该文件，第10行返回内置默认配置，此时第7行打印的 course 会是默认的“大模型应用开发”，而非 settings.json 里的值。能否读到文件取决于该绝对路径在运行环境上是否真实存在，这一点源码无法保证。\"\n}",
+        "usage": [
+          {
+            "prompt_tokens": 862,
+            "completion_tokens": 69,
+            "total_tokens": 931,
+            "prompt_tokens_details": {
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 222
+          },
+          {
+            "prompt_tokens": 1466,
+            "completion_tokens": 145,
+            "total_tokens": 1611,
+            "prompt_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "prompt_cache_hit_tokens": 1280,
+            "prompt_cache_miss_tokens": 186
+          },
+          {
+            "prompt_tokens": 2916,
+            "completion_tokens": 262,
+            "total_tokens": 3178,
+            "prompt_tokens_details": {
+              "cached_tokens": 1152
+            },
+            "prompt_cache_hit_tokens": 1152,
+            "prompt_cache_miss_tokens": 1764
+          }
+        ],
+        "turns": 3,
+        "tool_calls": 6
+      },
+      "observed_request_usage": [
+        {
+          "prompt_tokens": 862,
+          "completion_tokens": 69,
+          "total_tokens": 931,
+          "prompt_tokens_details": {
+            "cached_tokens": 640
+          },
+          "prompt_cache_hit_tokens": 640,
+          "prompt_cache_miss_tokens": 222
+        },
+        {
+          "prompt_tokens": 1466,
+          "completion_tokens": 145,
+          "total_tokens": 1611,
+          "prompt_tokens_details": {
+            "cached_tokens": 1280
+          },
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 186
+        },
+        {
+          "prompt_tokens": 2916,
+          "completion_tokens": 262,
+          "total_tokens": 3178,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152
+          },
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 1764
+        }
+      ],
+      "elapsed_seconds": 16.5956,
+      "source_unchanged": true,
+      "artifacts": [
+        {
+          "call_id": "call_00_tubfkV8Km1lAvXqOZdrJ6533",
+          "id": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "size_bytes": 992,
+          "sha256": "00c16194935144885b97c99bc84096c6c9e93c1b37f2d0cb01cf0c8cd4d5867f",
+          "body": {
+            "instructions": "---\nname: repo-guide\ndescription: 带初学者理解小型代码仓库的入口、调用关系和条件分支。用于仓库导读、寻找配置入口、解释源码；每项结论回到实际读取的文件行号。\n---\n# 仓库导读\n\n先用资料工具查看可读文件，再围绕用户问题读取入口及被调用函数。资料可能不完整；未读到实现时说明缺口，不根据文件名猜测行为。\n\n解释配置、路径、默认值或异常分支时，按需读取 [条件核验清单](references/conditions.md)。该清单提供核验方法，不预先提供任何仓库的答案。\n\n回答先给一条简短调用关系，再把关键条件讲清楚，引用实际文件和行号。给初学者留一个可以回到源码验证的问题。只回答用户所问范围，不为了使用 Skill 扩大任务。\n\n这些方法不授予运行程序或修改文件的权限。工具可执行范围由运行时和服务端控制。\n",
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_VRC5yVLVjLehMu77M8TT2530",
+          "id": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "size_bytes": 302,
+          "sha256": "78376ce815a19ac2d7a8308ae73bb10b08ee2ef209954cab3824f122ba38260c",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"files\": [\n    \"README.md\",\n    \"main.py\",\n    \"config.py\",\n    \"settings.json\"\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_00_ThbKnR0fk2M4QeOtSxIe6892",
+          "id": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "size_bytes": 1268,
+          "sha256": "b1acd01a4414dc2b9a19a6af1651f317121edcbb3cbf02b2e4bae8e3fb35c07d",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"config.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"配置读取；本仓库只作为 Agent 阅读资料。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"import json\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"import os\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"from pathlib import Path\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"def load_settings():\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"    path = Path(os.environ.get(\\\"STUDYBOX_CONFIG\\\", \\\"settings.json\\\"))\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"    if not path.exists():\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"        return {\\\"course\\\": \\\"大模型应用开发\\\", \\\"timeout\\\": 30}\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    return json.loads(path.read_text(encoding=\\\"utf-8\\\"))\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_01_qUQu17bRdypzTXgAuABw1006",
+          "id": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "size_bytes": 1090,
+          "sha256": "3df7a6092f393ae41b912a7710e57a53bb23f0a6fca6d32c4f241e8e2210e8ef",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"main.py\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"\\\"\\\"\\\"StudyBox 运行入口。\\\"\\\"\\\"\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"from config import load_settings\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"def main():\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"    settings = load_settings()\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"    print(f\\\"欢迎，{settings['course']}！\\\")\"\n    },\n    {\n      \"line\": 8,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 9,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 10,\n      \"text\": \"if __name__ == \\\"__main__\\\":\"\n    },\n    {\n      \"line\": 11,\n      \"text\": \"    main()\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_02_v6dLsbFyIcCEuf2Z20PM4285",
+          "id": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "size_bytes": 386,
+          "sha256": "2368b437e7a2f194590f88d6f1f6e90f344c1208fd593db9495d4e55ea289503",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"settings.json\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"{\\\"course\\\": \\\"动手学大模型应用开发\\\", \\\"timeout\\\": 15}\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        },
+        {
+          "call_id": "call_03_Jp8ZfOyZRK02PSaoWmcC0164",
+          "id": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "size_bytes": 997,
+          "sha256": "6f2ce18e79c6ac207fbab9805da6102071d2740d389aaafd708d491697841289",
+          "body": {
+            "mcp_result": {
+              "_meta": {
+                "io.modelcontextprotocol/serverInfo": {
+                  "name": "course-repository",
+                  "version": "1.0"
+                }
+              },
+              "content": [
+                {
+                  "text": "{\n  \"path\": \"README.md\",\n  \"lines\": [\n    {\n      \"line\": 1,\n      \"text\": \"# StudyBox 教学仓库\"\n    },\n    {\n      \"line\": 2,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 3,\n      \"text\": \"这是课程自编的极小文件仓库，用于练习目录查看、文本搜索和带行号的引用。\"\n    },\n    {\n      \"line\": 4,\n      \"text\": \"\"\n    },\n    {\n      \"line\": 5,\n      \"text\": \"运行入口为 main.py。应用先加载配置，再生成欢迎消息。\"\n    },\n    {\n      \"line\": 6,\n      \"text\": \"配置文件名通过 STUDYBOX_CONFIG 环境变量覆盖，默认读取 settings.json。\"\n    },\n    {\n      \"line\": 7,\n      \"text\": \"配置加载实现请沿 main.py 中的导入继续查找。\"\n    }\n  ]\n}",
+                  "type": "text"
+                }
+              ],
+              "isError": false,
+              "resultType": "complete"
+            },
+            "ok": true
+          }
+        }
+      ],
+      "grade": {
+        "passed": true,
+        "checks": {
+          "completed": true,
+          "schema": true,
+          "facts": true,
+          "citations": true,
+          "source_unchanged": true
+        },
+        "failed_checks": [],
+        "ungraded": [
+          "explanation 的自然语言事实一致性",
+          "教学表达质量"
+        ]
+      }
+    }
+  ],
+  "complete": true,
+  "limitations": [
+    "四题两次属于开发集演示，不能估计总体能力或稳定提升。",
+    "自然语言 explanation 未被规则评分覆盖。"
+  ]
+}
