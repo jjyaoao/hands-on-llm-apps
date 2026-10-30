@@ -1,0 +1,22 @@
+{
+  "repository": "datawhalechina/hello-agents",
+  "revision": "4f7682ceafe573d07cd8a7d0b89908500e83227d",
+  "reviewed_at": "2026-09-11",
+  "method": "static_source_review_after_sha256_verification; upstream code not executed",
+  "sources": {
+    "code/chapter4/ReAct.py": "bf792fddcd8f9f8d1dccc15b147fe1ceb61cd590721adb82c8ff591c7692ea74",
+    "code/chapter4/llm_client.py": "c8c308ec0d9bb883dc487ed8ec6392a2b2e9dcd246ad2e346b83c7750295186b",
+    "code/chapter4/tools.py": "8b7b10c4713b7d3e2e6236076faf3859720dbc82e5c06a83e6cc777ebe09780f"
+  },
+  "branches": [
+    {"condition": "Action 以 Finish 开头", "behavior": "解析方括号内容并立即 return；格式不完整时解析结果可能为空串", "location": "ReAct.py:54-58,88-90"},
+    {"condition": "响应为空或未解析出 Action", "behavior": "break 后到达公共尾部并返回 None；并非一定用尽步数", "location": "ReAct.py:47-52,72-73"},
+    {"condition": "普通 Action 的工具名或输入格式无效", "behavior": "追加错误 Observation 后 continue，下一轮仍会消耗步数", "location": "ReAct.py:60-62"},
+    {"condition": "工具未注册", "behavior": "生成错误字符串并追加 Action/Observation，循环可以继续", "location": "ReAct.py:65-70"},
+    {"condition": "while 条件不再满足 max_steps", "behavior": "退出循环，打印尾部日志并返回 None", "location": "ReAct.py:37-38,72-73"},
+    {"condition": "模型请求或流式读取发生异常", "behavior": "think 的 try/except 返回 None，run 随后走空响应 break 分支；初始化异常不在该 try 内", "location": "llm_client.py:23-26,33-55; ReAct.py:46-48"},
+    {"condition": "内置 search 在其 try 内发生异常", "behavior": "search 返回错误字符串，循环把它当 Observation 保存", "location": "tools.py:15-49; ReAct.py:65-70"},
+    {"condition": "其他注册工具抛出未捕获异常", "behavior": "run 的工具调用周围没有 try/except，异常向调用者传播；不能笼统称所有工具错误都会继续", "location": "ReAct.py:65-70"}
+  ],
+  "limit": "只核查固定版本的源码控制流，不代表运行过上游 Agent、搜索服务或模型；教师录制前仍需按原文复核。"
+}

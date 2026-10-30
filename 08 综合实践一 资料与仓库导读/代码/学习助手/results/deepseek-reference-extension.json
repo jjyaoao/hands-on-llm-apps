@@ -1,0 +1,48 @@
+{
+  "kind": "explicit_budget_extension",
+  "recorded_at": "2026-09-23T12:56:56.117899+00:00",
+  "model": "deepseek-flash",
+  "run_id": "7e7bb2fede77443ab61b91c3ea26cde2",
+  "before": {
+    "turns": 7,
+    "tool_calls": 7,
+    "limit": 7
+  },
+  "granted_turns": 1,
+  "after": {
+    "turns": 8,
+    "tool_calls": 7,
+    "limit": 8
+  },
+  "status": "final_answer",
+  "answer": "**第1步 停止条件**：读完 [720fff051038a9c3] 的 run 全文可见，出循环有四个原因——LLM 无返回、Action 解析不出、Action 是 Finish 则直接返回答案，以及步数用尽后打印终止并返回空。`max_steps` 默认 5。\n\n**第2步 Observation 回流**：工具执行或格式错误后，把本轮 Action 与 Observation 追加进 history；下一轮提示词里带上 history，模型据此看到上次结果再决策 [720fff051038a9c3]。",
+  "citations": {
+    "has_citations": true,
+    "all_citations_read": true,
+    "locations": {
+      "720fff051038a9c3": {
+        "path": "code/chapter4/ReAct.py",
+        "page": null,
+        "start": 1,
+        "end": 99,
+        "line_unit": "source_line",
+        "document_sha256": "bf792fddcd8f9f8d1dccc15b147fe1ceb61cd590721adb82c8ff591c7692ea74"
+      }
+    },
+    "unknown_or_unread": [],
+    "semantic_support": "requires_source_review"
+  },
+  "usage_this_extension": [
+    {
+      "prompt_tokens": 6418,
+      "completion_tokens": 128,
+      "total_tokens": 6546,
+      "prompt_tokens_details": {
+        "cached_tokens": 4736
+      },
+      "prompt_cache_hit_tokens": 4736,
+      "prompt_cache_miss_tokens": 1682
+    }
+  ],
+  "model_errors": []
+}

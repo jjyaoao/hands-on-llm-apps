@@ -1,0 +1,37 @@
+{
+  "kind": "explicit_evidence_revision",
+  "recorded_at": "2026-09-24T05:53:25.650896+00:00",
+  "cases": [
+    {
+      "name": "hello-agents",
+      "run_id": "dda6d3ebe0dd4b3988db0c05d8796780",
+      "before": {
+        "turns": 4,
+        "tool_calls": 6
+      },
+      "status": "final_answer",
+      "answer": "**两步导读（ReAct.py，完整读过 [720fff051038a9c3]）**\n\n1. **停止有四条路**：正常是走到 `Finish` 直接返回答案；其次是 LLM 返回空、Action 解析失败、以及循环用满 `max_steps`（默认 5）——后三条都以终止收场并可能返回 `None` [720fff051038a9c3]。\n\n2. **Observation 进下一轮**：每轮把本轮的 Action 文本和工具返回的 Observation 依次追加进 history；下一轮把 history 拼进提示再次询问模型。若 Action 格式无效，只写入一条提示性 Observation，然后继续循环 [720fff051038a9c3]。\n\n检查点：能分清\"Finish 是成功出口，其余是异常出口\"，并说出 history 是唯一的跨轮记忆 [720fff051038a9c3]。",
+      "after": {
+        "turns": 7,
+        "tool_calls": 8
+      },
+      "citations": {
+        "has_citations": true,
+        "all_citations_read": true,
+        "locations": {
+          "720fff051038a9c3": {
+            "path": "code/chapter4/ReAct.py",
+            "page": null,
+            "start": 1,
+            "end": 99,
+            "line_unit": "source_line",
+            "document_sha256": "bf792fddcd8f9f8d1dccc15b147fe1ceb61cd590721adb82c8ff591c7692ea74"
+          }
+        },
+        "unknown_or_unread": [],
+        "semantic_support": "requires_source_review"
+      },
+      "revision": "4f7682ceafe573d07cd8a7d0b89908500e83227d"
+    }
+  ]
+}

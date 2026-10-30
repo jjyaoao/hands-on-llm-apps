@@ -1,0 +1,52 @@
+{
+  "repository": "datawhalechina/hello-agents",
+  "revision": "4f7682ceafe573d07cd8a7d0b89908500e83227d",
+  "commit_date": "2026-09-04T09:03:14Z",
+  "checked_at": "2026-09-07",
+  "license_header": "Attribution-NonCommercial-ShareAlike 4.0 International",
+  "use": "可选本地学习输入；原文缓存不进入本课程 Git。课程内容独立编写，录制或发布第三方内容时另行核对授权范围。",
+  "files": [
+    {
+      "path": "README.md",
+      "role": "reading",
+      "git_blob_sha1": "1df6b3f27c5f675bcabd5ba330e31c380f007e53",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/README.md",
+      "sha256": "e02fb30e4b7cc78f21615f4b45d73a9ce456b65cc658189ae499656943114137"
+    },
+    {
+      "path": "code/chapter4/ReAct.py",
+      "role": "reading",
+      "git_blob_sha1": "04ae533df7d71f14a685eb0349e024291fda7c90",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/code/chapter4/ReAct.py",
+      "sha256": "bf792fddcd8f9f8d1dccc15b147fe1ceb61cd590721adb82c8ff591c7692ea74"
+    },
+    {
+      "path": "code/chapter4/llm_client.py",
+      "role": "reading",
+      "git_blob_sha1": "0793e234b8456e986fe23e426136033c1d44519a",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/code/chapter4/llm_client.py",
+      "sha256": "c8c308ec0d9bb883dc487ed8ec6392a2b2e9dcd246ad2e346b83c7750295186b"
+    },
+    {
+      "path": "code/chapter4/tools.py",
+      "role": "reading",
+      "git_blob_sha1": "a4665c2a6c8d352f9fe6e7647a638bcfa98e262d",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/code/chapter4/tools.py",
+      "sha256": "8b7b10c4713b7d3e2e6236076faf3859720dbc82e5c06a83e6cc777ebe09780f"
+    },
+    {
+      "path": "docs/chapter4/第四章 智能体经典范式构建.md",
+      "role": "reading",
+      "git_blob_sha1": "ca101cafb34055d08d56a7884cf3e460bd5ec046",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F%E6%9E%84%E5%BB%BA.md",
+      "sha256": "3f02e84fcf75c76caef3eaca5b91765251d1d8afbbf0f6dc750abcd25eff1ef1"
+    },
+    {
+      "path": "LICENSE.txt",
+      "role": "license",
+      "git_blob_sha1": "cbe5ad1670406e4402217edfb82d2c56af7e8631",
+      "url": "https://raw.githubusercontent.com/datawhalechina/hello-agents/4f7682ceafe573d07cd8a7d0b89908500e83227d/LICENSE.txt",
+      "sha256": "1349a4b6148492b44f629e64eed676612e234fe9a839e4f3b277c1482c8849f1"
+    }
+  ]
+}
