@@ -1,0 +1,907 @@
+{
+  "kind": "real_deepseek_exercise_feedback",
+  "recorded_at": "2026-09-24T05:53:49.483320+00:00",
+  "model": "deepseek-flash",
+  "student_release_note": "历史模型观测输入；只保留离线 Notebook 所需的尝试证据、回答、工具返回和状态摘要。",
+  "cases": [
+    {
+      "exercise_id": "rank-positive",
+      "lesson_id": "f68b89ef46934db4b20cd646e02a8f3d",
+      "phases": [
+        {
+          "phase": "needs_work",
+          "state": {
+            "status": "final_answer",
+            "turns": 3,
+            "tool_calls": 2,
+            "answer": "当前测试：稳定同分、limit=1、空列表已通过；过滤零分、降序、非法 limit、布尔 limit 未通过。\n\n提示：零分项出现在结果里，说明过滤条件写错了方向——score<=0 应被剔除。另外检查 limit 判断：True 是布尔，需显式排除 bool 类型，再做正整数校验和截断。\n\n试试自己改，改完再跑一次。",
+            "run_id": "b755bf1ba60b48cab8bb9079f80b80ee"
+          },
+          "learning": {
+            "lesson_id": "f68b89ef46934db4b20cd646e02a8f3d",
+            "status": "needs_work",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "6c73e9d719a1448289859fbfa4fa3359",
+                "exercise_id": "rank-positive",
+                "source_sha256": "8a6ede1592b3d1a49b95882dd712c35e1d073700e064c03c6871dc22781e3769",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:53:49.582302+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "filter-zero",
+                      "passed": false,
+                      "actual": [
+                        {
+                          "id": "zero",
+                          "score": 0
+                        },
+                        {
+                          "id": "hit",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "descending",
+                      "passed": false,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "score": 1
+                        },
+                        {
+                          "id": "b",
+                          "score": 4
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "score": 3
+                        },
+                        {
+                          "id": "a",
+                          "score": 3
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "empty",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "boolean-limit",
+                      "passed": false,
+                      "actual": []
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_XzjYPI19iS3eb8MhrEWG4418",
+              "id": "613b02bbfc46160d9895e40c26a5f2f049c0e1d2eaa3a4da16eee3e5002414cd",
+              "size_bytes": 1126,
+              "sha256": "613b02bbfc46160d9895e40c26a5f2f049c0e1d2eaa3a4da16eee3e5002414cd",
+              "body": {
+                "data": {
+                  "corpus_version": "be89758248b7b587399212ab18d58e90b83d1b54197a86271c60e9015ad30acc",
+                  "exercise_id": "rank-positive",
+                  "hint_level": 0,
+                  "latest_attempt": {
+                    "attempt_id": "6c73e9d719a1448289859fbfa4fa3359",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "rank-positive",
+                    "recorded_at": "2026-09-24T05:53:49.582302+00:00",
+                    "result": {
+                      "passed": false,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [
+                            {
+                              "id": "zero",
+                              "score": 0
+                            },
+                            {
+                              "id": "hit",
+                              "score": 2
+                            }
+                          ],
+                          "id": "filter-zero",
+                          "passed": false
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "a",
+                              "score": 1
+                            },
+                            {
+                              "id": "b",
+                              "score": 4
+                            }
+                          ],
+                          "id": "descending",
+                          "passed": false
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "b",
+                              "score": 3
+                            },
+                            {
+                              "id": "a",
+                              "score": 3
+                            }
+                          ],
+                          "id": "stable-tie",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "a",
+                              "score": 2
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "empty",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "invalid-limit",
+                          "passed": false
+                        },
+                        {
+                          "actual": [],
+                          "id": "boolean-limit",
+                          "passed": false
+                        }
+                      ]
+                    },
+                    "source_sha256": "8a6ede1592b3d1a49b95882dd712c35e1d073700e064c03c6871dc22781e3769"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "f68b89ef46934db4b20cd646e02a8f3d",
+                  "status": "needs_work"
+                },
+                "ok": true
+              }
+            },
+            {
+              "call_id": "call_00_tFl8EHHvjkZpeyhqzNtj8325",
+              "id": "fff7cf5c303a55bdd7925bcf173591fea2c19f5134dc5be69fe5b7e3c764c905",
+              "size_bytes": 186,
+              "sha256": "fff7cf5c303a55bdd7925bcf173591fea2c19f5134dc5be69fe5b7e3c764c905",
+              "body": {
+                "data": {
+                  "hint": "先比较失败用例里零分项的位置，它应该出现在结果中吗？",
+                  "level": 1,
+                  "scope": "只提供当前一级提示，不返回完整参考实现"
+                },
+                "ok": true
+              }
+            }
+          ]
+        },
+        {
+          "phase": "tests_passed",
+          "state": {
+            "status": "final_answer",
+            "turns": 2,
+            "tool_calls": 1,
+            "answer": "已读取最新记录：随课用例全部通过（过滤非正分、降序、同分稳定、limit 截断、空列表，以及非正整数/布尔 limit 抛 ValueError）。这只说明本轮随课测试通过，不代表已完全掌握。\n\n自检：limit 传入 True 时你走的是哪条分支？为什么普通 `isinstance(limit, int)` 会误放行布尔值？",
+            "run_id": "f7c3e384a81545bea45954e2e6053337"
+          },
+          "learning": {
+            "lesson_id": "f68b89ef46934db4b20cd646e02a8f3d",
+            "status": "tests_passed",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "6c73e9d719a1448289859fbfa4fa3359",
+                "exercise_id": "rank-positive",
+                "source_sha256": "8a6ede1592b3d1a49b95882dd712c35e1d073700e064c03c6871dc22781e3769",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:53:49.582302+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "filter-zero",
+                      "passed": false,
+                      "actual": [
+                        {
+                          "id": "zero",
+                          "score": 0
+                        },
+                        {
+                          "id": "hit",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "descending",
+                      "passed": false,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "score": 1
+                        },
+                        {
+                          "id": "b",
+                          "score": 4
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "score": 3
+                        },
+                        {
+                          "id": "a",
+                          "score": 3
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "empty",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "boolean-limit",
+                      "passed": false,
+                      "actual": []
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              },
+              {
+                "attempt_id": "e15e01d4952940b28bf92757dbf97fad",
+                "exercise_id": "rank-positive",
+                "source_sha256": "d3c23a95fb550a39ce9b8719a9a159b2e7a95211d5865644d997f661dff204f9",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:54:01.094113+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "filter-zero",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "hit",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "descending",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "score": 4
+                        },
+                        {
+                          "id": "a",
+                          "score": 1
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "score": 3
+                        },
+                        {
+                          "id": "a",
+                          "score": 3
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "score": 2
+                        }
+                      ]
+                    },
+                    {
+                      "id": "empty",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    },
+                    {
+                      "id": "boolean-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": true,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_kfpubAh7Hab4AQd1gwYD0650",
+              "id": "b23d2e6c1a25e526b77771439d3ce2e3cb051c2e608b59ffad4e22108dae71fa",
+              "size_bytes": 1135,
+              "sha256": "b23d2e6c1a25e526b77771439d3ce2e3cb051c2e608b59ffad4e22108dae71fa",
+              "body": {
+                "data": {
+                  "corpus_version": "be89758248b7b587399212ab18d58e90b83d1b54197a86271c60e9015ad30acc",
+                  "exercise_id": "rank-positive",
+                  "hint_level": 1,
+                  "latest_attempt": {
+                    "attempt_id": "e15e01d4952940b28bf92757dbf97fad",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "rank-positive",
+                    "recorded_at": "2026-09-24T05:54:01.094113+00:00",
+                    "result": {
+                      "passed": true,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [
+                            {
+                              "id": "hit",
+                              "score": 2
+                            }
+                          ],
+                          "id": "filter-zero",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "b",
+                              "score": 4
+                            },
+                            {
+                              "id": "a",
+                              "score": 1
+                            }
+                          ],
+                          "id": "descending",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "b",
+                              "score": 3
+                            },
+                            {
+                              "id": "a",
+                              "score": 3
+                            }
+                          ],
+                          "id": "stable-tie",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "id": "a",
+                              "score": 2
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "empty",
+                          "passed": true
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "invalid-limit",
+                          "passed": true
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "boolean-limit",
+                          "passed": true
+                        }
+                      ]
+                    },
+                    "source_sha256": "d3c23a95fb550a39ce9b8719a9a159b2e7a95211d5865644d997f661dff204f9"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "f68b89ef46934db4b20cd646e02a8f3d",
+                  "status": "tests_passed"
+                },
+                "ok": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exercise_id": "due-cards",
+      "lesson_id": "df7e952505f1435197f91aff9fa58637",
+      "phases": [
+        {
+          "phase": "needs_work",
+          "state": {
+            "status": "final_answer",
+            "turns": 2,
+            "tool_calls": 2,
+            "answer": "本轮测试未通过，`equal-today` 和 `stable-tie` 两个用例返回了空列表。\n\n提示：先检查筛选条件——`due` 恰好等于 `today` 的那张卡，按题意应不应该被选中？用 `<=` 还是 `<`，会直接决定这两组用例的结果。再看 `stable-tie` 里同一天的卡片是否因为排序方式而丢掉了顺序。\n\n请自己核对条件与排序稳定性后再试一次。",
+            "run_id": "ff571a9e18fa4988b0ed4bcd52671588"
+          },
+          "learning": {
+            "lesson_id": "df7e952505f1435197f91aff9fa58637",
+            "status": "needs_work",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "81118af4dd4a4e6bbbdcbeb188e110ba",
+                "exercise_id": "due-cards",
+                "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:54:07.988670+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_3e4rAlUEcHg5My4BGGI89934",
+              "id": "60f6108b0734c6d3f1f62d0631962154ded1d246ba77e70524b6bf288109201d",
+              "size_bytes": 1034,
+              "sha256": "60f6108b0734c6d3f1f62d0631962154ded1d246ba77e70524b6bf288109201d",
+              "body": {
+                "data": {
+                  "corpus_version": "eb49e0b11d3e43c0f6a0d43e62bf9e18cb4a6655f0c540bda1a1f4e0032e28fe",
+                  "exercise_id": "due-cards",
+                  "hint_level": 0,
+                  "latest_attempt": {
+                    "attempt_id": "81118af4dd4a4e6bbbdcbeb188e110ba",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "due-cards",
+                    "recorded_at": "2026-09-24T05:54:07.988670+00:00",
+                    "result": {
+                      "passed": false,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [],
+                          "id": "equal-today",
+                          "passed": false
+                        },
+                        {
+                          "actual": [],
+                          "id": "exclude-future",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            },
+                            {
+                              "due": "2026-09-06",
+                              "id": "b"
+                            }
+                          ],
+                          "id": "date-order",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "stable-tie",
+                          "passed": false
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "invalid-limit",
+                          "passed": true
+                        }
+                      ]
+                    },
+                    "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "df7e952505f1435197f91aff9fa58637",
+                  "status": "needs_work"
+                },
+                "ok": true
+              }
+            },
+            {
+              "call_id": "call_01_8zxG6vJxSpZBuXfOKIek7167",
+              "id": "f7202ffa7b728fc17b791d1b890c1e33cad859eadec950c7b3f5521fab58caba",
+              "size_bytes": 194,
+              "sha256": "f7202ffa7b728fc17b791d1b890c1e33cad859eadec950c7b3f5521fab58caba",
+              "body": {
+                "data": {
+                  "hint": "看失败用例中的 due 是否恰好等于 today，这张卡应不应该被选中？",
+                  "level": 1,
+                  "scope": "只提供当前一级提示，不返回完整参考实现"
+                },
+                "ok": true
+              }
+            }
+          ]
+        },
+        {
+          "phase": "tests_passed",
+          "state": {
+            "status": "final_answer",
+            "turns": 2,
+            "tool_calls": 1,
+            "answer": "本轮随课测试全部通过：等于今天的计入、未来卡排除、按 due 升序、limit 截断、同日保持原顺序、非法 limit 抛 ValueError。\n\n这只能说明随课用例通过，不等于已掌握。请自检：同一天多张卡时，你的实现靠什么保证原顺序？如果改用 set 或先排序再按 due 分组，这个性质还成立吗？",
+            "run_id": "92cc7cf85976479e9dcdf0c1e070afac"
+          },
+          "learning": {
+            "lesson_id": "df7e952505f1435197f91aff9fa58637",
+            "status": "tests_passed",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "81118af4dd4a4e6bbbdcbeb188e110ba",
+                "exercise_id": "due-cards",
+                "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:54:07.988670+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              },
+              {
+                "attempt_id": "0a2ebf0507984f50a9d8a804e8061aad",
+                "exercise_id": "due-cards",
+                "source_sha256": "bf3fea5769336bcf21136b6973d26d3fcd082b78153c5240583735fa5266887e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-24T05:54:16.587357+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "today",
+                          "due": "2026-09-07"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "due": "2026-09-07"
+                        },
+                        {
+                          "id": "a",
+                          "due": "2026-09-07"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": true,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_OHuy9So3XbV0UmeBhmch4612",
+              "id": "95a5ed3ee4eee689c0a930188dbbf3c84aaeaa33e3f3655355d2cc83cb154f93",
+              "size_bytes": 1125,
+              "sha256": "95a5ed3ee4eee689c0a930188dbbf3c84aaeaa33e3f3655355d2cc83cb154f93",
+              "body": {
+                "data": {
+                  "corpus_version": "eb49e0b11d3e43c0f6a0d43e62bf9e18cb4a6655f0c540bda1a1f4e0032e28fe",
+                  "exercise_id": "due-cards",
+                  "hint_level": 1,
+                  "latest_attempt": {
+                    "attempt_id": "0a2ebf0507984f50a9d8a804e8061aad",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "due-cards",
+                    "recorded_at": "2026-09-24T05:54:16.587357+00:00",
+                    "result": {
+                      "passed": true,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-07",
+                              "id": "today"
+                            }
+                          ],
+                          "id": "equal-today",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "exclude-future",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            },
+                            {
+                              "due": "2026-09-06",
+                              "id": "b"
+                            }
+                          ],
+                          "id": "date-order",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-07",
+                              "id": "b"
+                            },
+                            {
+                              "due": "2026-09-07",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "stable-tie",
+                          "passed": true
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "invalid-limit",
+                          "passed": true
+                        }
+                      ]
+                    },
+                    "source_sha256": "bf3fea5769336bcf21136b6973d26d3fcd082b78153c5240583735fa5266887e"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "df7e952505f1435197f91aff9fa58637",
+                  "status": "tests_passed"
+                },
+                "ok": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

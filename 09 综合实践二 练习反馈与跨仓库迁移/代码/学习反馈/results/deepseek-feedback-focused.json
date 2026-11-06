@@ -1,0 +1,418 @@
+{
+  "kind": "real_deepseek_exercise_feedback",
+  "recorded_at": "2026-09-23T12:52:22.964888+00:00",
+  "model": "deepseek-flash",
+  "student_release_note": "历史模型观测输入；只保留离线 Notebook 所需的尝试证据、回答、工具返回和状态摘要。",
+  "cases": [
+    {
+      "exercise_id": "due-cards",
+      "lesson_id": "01d958b5f3674b6fb147d76c5f603348",
+      "phases": [
+        {
+          "phase": "needs_work",
+          "state": {
+            "status": "final_answer",
+            "turns": 2,
+            "tool_calls": 2,
+            "answer": "实测：date-order、limit-one、exclude-future、invalid-limit 通过；equal-today 和 stable-tie 未过，说明到期筛选或同天排序有偏差。\n\n提示：检查 due 恰好等于 today 的卡片是否被选中了。同一天的多张卡要保持原顺序，排序时用稳定排序（如按 due 排序即可，别打乱同键顺序）。改完自己重跑验证。随课用例通过只代表提交测试通过，不等于已掌握。",
+            "run_id": "b0f7271a2c6a48238e2366725bf5af6e"
+          },
+          "learning": {
+            "lesson_id": "01d958b5f3674b6fb147d76c5f603348",
+            "status": "needs_work",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "6d2b067685584528b2420194bca8f5d9",
+                "exercise_id": "due-cards",
+                "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-23T12:52:23.014538+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_rgw4Jlyz1mLpJjuwxcGH1283",
+              "id": "5b2e4a1f49802bf04040e5b99d21b068b340b6e8e608d43e07d3198a29f25086",
+              "size_bytes": 1034,
+              "sha256": "5b2e4a1f49802bf04040e5b99d21b068b340b6e8e608d43e07d3198a29f25086",
+              "body": {
+                "data": {
+                  "corpus_version": "eb49e0b11d3e43c0f6a0d43e62bf9e18cb4a6655f0c540bda1a1f4e0032e28fe",
+                  "exercise_id": "due-cards",
+                  "hint_level": 0,
+                  "latest_attempt": {
+                    "attempt_id": "6d2b067685584528b2420194bca8f5d9",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "due-cards",
+                    "recorded_at": "2026-09-23T12:52:23.014538+00:00",
+                    "result": {
+                      "passed": false,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [],
+                          "id": "equal-today",
+                          "passed": false
+                        },
+                        {
+                          "actual": [],
+                          "id": "exclude-future",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            },
+                            {
+                              "due": "2026-09-06",
+                              "id": "b"
+                            }
+                          ],
+                          "id": "date-order",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "stable-tie",
+                          "passed": false
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "invalid-limit",
+                          "passed": true
+                        }
+                      ]
+                    },
+                    "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "01d958b5f3674b6fb147d76c5f603348",
+                  "status": "needs_work"
+                },
+                "ok": true
+              }
+            },
+            {
+              "call_id": "call_01_C5OLK3w2f7NP3uTbavfy6594",
+              "id": "f7202ffa7b728fc17b791d1b890c1e33cad859eadec950c7b3f5521fab58caba",
+              "size_bytes": 194,
+              "sha256": "f7202ffa7b728fc17b791d1b890c1e33cad859eadec950c7b3f5521fab58caba",
+              "body": {
+                "data": {
+                  "hint": "看失败用例中的 due 是否恰好等于 today，这张卡应不应该被选中？",
+                  "level": 1,
+                  "scope": "只提供当前一级提示，不返回完整参考实现"
+                },
+                "ok": true
+              }
+            }
+          ]
+        },
+        {
+          "phase": "tests_passed",
+          "state": {
+            "status": "final_answer",
+            "turns": 2,
+            "tool_calls": 1,
+            "answer": "已读取最新记录：本轮测试 `passed: true`，随课用例全部通过，包括：due 等于 today 的保留、未来卡片排除、按日期升序、limit=1 截断、同日期稳定保序、非整数 limit 抛 ValueError。\n\n注意：这只说明随课用例通过，不代表已完全掌握。\n\n自检问题：如果 `today` 字符串格式统一但卡片先按乱序传入，你如何确认“同一天保留原顺序”在排序实现里真的成立？",
+            "run_id": "5b05f040a60b4042ba445cc4ac2f76ae"
+          },
+          "learning": {
+            "lesson_id": "01d958b5f3674b6fb147d76c5f603348",
+            "status": "tests_passed",
+            "hint_level": 1,
+            "attempts": [
+              {
+                "attempt_id": "6d2b067685584528b2420194bca8f5d9",
+                "exercise_id": "due-cards",
+                "source_sha256": "acabb7f5d24a7d91b0118c85c01f54f24f7c3dd21dc238c56c64c376b2be104e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-23T12:52:23.014538+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": false,
+                      "actual": []
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": false,
+                  "stdout_preview": ""
+                }
+              },
+              {
+                "attempt_id": "145a33fb09744a9ea44b3d5c263e40bc",
+                "exercise_id": "due-cards",
+                "source_sha256": "bf3fea5769336bcf21136b6973d26d3fcd082b78153c5240583735fa5266887e",
+                "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                "recorded_at": "2026-09-23T12:52:30.403608+00:00",
+                "execution": "actual_python_subprocess",
+                "result": {
+                  "tests": [
+                    {
+                      "id": "equal-today",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "today",
+                          "due": "2026-09-07"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "exclude-future",
+                      "passed": true,
+                      "actual": []
+                    },
+                    {
+                      "id": "date-order",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        },
+                        {
+                          "id": "b",
+                          "due": "2026-09-06"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "limit-one",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "a",
+                          "due": "2026-09-05"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "stable-tie",
+                      "passed": true,
+                      "actual": [
+                        {
+                          "id": "b",
+                          "due": "2026-09-07"
+                        },
+                        {
+                          "id": "a",
+                          "due": "2026-09-07"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "invalid-limit",
+                      "passed": true,
+                      "exception_type": "ValueError"
+                    }
+                  ],
+                  "passed": true,
+                  "stdout_preview": ""
+                }
+              }
+            ]
+          },
+          "artifacts": [
+            {
+              "call_id": "call_00_fz2WWSF4Qm5pw2F1wjwZ4497",
+              "id": "3f7af2d7cc281d3d1421071d4446080c95ee2e352a65a729c9574bab6428ec2a",
+              "size_bytes": 1125,
+              "sha256": "3f7af2d7cc281d3d1421071d4446080c95ee2e352a65a729c9574bab6428ec2a",
+              "body": {
+                "data": {
+                  "corpus_version": "eb49e0b11d3e43c0f6a0d43e62bf9e18cb4a6655f0c540bda1a1f4e0032e28fe",
+                  "exercise_id": "due-cards",
+                  "hint_level": 1,
+                  "latest_attempt": {
+                    "attempt_id": "145a33fb09744a9ea44b3d5c263e40bc",
+                    "catalog_sha256": "face1b4e145d515db24e3657c1ed6a3f62c3de13bfd0fa91da7c055d974fd429",
+                    "execution": "actual_python_subprocess",
+                    "exercise_id": "due-cards",
+                    "recorded_at": "2026-09-23T12:52:30.403608+00:00",
+                    "result": {
+                      "passed": true,
+                      "stdout_preview": "",
+                      "tests": [
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-07",
+                              "id": "today"
+                            }
+                          ],
+                          "id": "equal-today",
+                          "passed": true
+                        },
+                        {
+                          "actual": [],
+                          "id": "exclude-future",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            },
+                            {
+                              "due": "2026-09-06",
+                              "id": "b"
+                            }
+                          ],
+                          "id": "date-order",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-05",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "limit-one",
+                          "passed": true
+                        },
+                        {
+                          "actual": [
+                            {
+                              "due": "2026-09-07",
+                              "id": "b"
+                            },
+                            {
+                              "due": "2026-09-07",
+                              "id": "a"
+                            }
+                          ],
+                          "id": "stable-tie",
+                          "passed": true
+                        },
+                        {
+                          "exception_type": "ValueError",
+                          "id": "invalid-limit",
+                          "passed": true
+                        }
+                      ]
+                    },
+                    "source_sha256": "bf3fea5769336bcf21136b6973d26d3fcd082b78153c5240583735fa5266887e"
+                  },
+                  "learner": "demo-student",
+                  "lesson_id": "01d958b5f3674b6fb147d76c5f603348",
+                  "status": "tests_passed"
+                },
+                "ok": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

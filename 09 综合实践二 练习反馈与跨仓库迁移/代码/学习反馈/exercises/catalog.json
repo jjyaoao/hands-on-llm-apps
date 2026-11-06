@@ -1,0 +1,28 @@
+{
+  "version":"1.0",
+  "exercises":[
+    {"id":"rank-positive","corpus":"mini-guide","title":"过滤、稳定排序和条数限制",
+     "prompt":"实现 solve(items, limit)：items 是含 id 和数值 score 的列表，过滤 score<=0 的项，按 score 降序，保持同分原顺序，最多返回 limit 项。limit 必须是正整数，布尔值不算整数。其他输入按上述前提提供。",
+     "hints":["先比较失败用例里零分项的位置，它应该出现在结果中吗？","把处理拆成过滤、排序、限制条数，检查这三步的先后。","只保留正分项，再用稳定的降序排序，最后切片；单独检查 limit 的类型和范围。"],
+     "tests":[
+       {"id":"filter-zero","args":[[{"id":"zero","score":0},{"id":"hit","score":2}],2],"expected":[{"id":"hit","score":2}]},
+       {"id":"descending","args":[[{"id":"a","score":1},{"id":"b","score":4}],2],"expected":[{"id":"b","score":4},{"id":"a","score":1}]},
+       {"id":"stable-tie","args":[[{"id":"b","score":3},{"id":"a","score":3}],2],"expected":[{"id":"b","score":3},{"id":"a","score":3}]},
+       {"id":"limit-one","args":[[{"id":"a","score":2},{"id":"b","score":1}],1],"expected":[{"id":"a","score":2}]},
+       {"id":"empty","args":[[],2],"expected":[]},
+       {"id":"invalid-limit","args":[[],0],"expected_exception":"ValueError"},
+       {"id":"boolean-limit","args":[[],true],"expected_exception":"ValueError"}
+     ]},
+    {"id":"due-cards","corpus":"flashcards","title":"日期边界与复习卡片",
+     "prompt":"实现 solve(cards, today, limit)：选择 due<=today 的卡片，按 due 升序，同一天保留原顺序，最多 limit 张。due 和 today 已是有效 YYYY-MM-DD 字符串。limit 为正整数且不接受布尔值；无到期卡返回空列表。",
+     "hints":["看失败用例中的 due 是否恰好等于 today，这张卡应不应该被选中？","把昨天、今天、明天三种边界分别列出来，先检查筛选条件。","到期包含今天；筛选后按日期升序，最后限制条数，不要把条数不变误当作限制失效。"],
+     "tests":[
+       {"id":"equal-today","args":[[{"id":"today","due":"2026-09-07"}],"2026-09-07",3],"expected":[{"id":"today","due":"2026-09-07"}]},
+       {"id":"exclude-future","args":[[{"id":"later","due":"2026-09-09"}],"2026-09-07",3],"expected":[]},
+       {"id":"date-order","args":[[{"id":"b","due":"2026-09-06"},{"id":"a","due":"2026-09-05"}],"2026-09-07",3],"expected":[{"id":"a","due":"2026-09-05"},{"id":"b","due":"2026-09-06"}]},
+       {"id":"limit-one","args":[[{"id":"a","due":"2026-09-05"},{"id":"b","due":"2026-09-06"}],"2026-09-07",1],"expected":[{"id":"a","due":"2026-09-05"}]},
+       {"id":"stable-tie","args":[[{"id":"b","due":"2026-09-07"},{"id":"a","due":"2026-09-07"}],"2026-09-07",3],"expected":[{"id":"b","due":"2026-09-07"},{"id":"a","due":"2026-09-07"}]},
+       {"id":"invalid-limit","args":[[],"2026-09-07",0],"expected_exception":"ValueError"}
+     ]}
+  ]
+}

@@ -1,6 +1,6 @@
 # 动手学大模型应用开发 · 学生资料
 
-这里按节提供目前开放的 **第 0～8 节课程资料**。每节先看 PDF 课件，再按实践编号阅读 Notebook 中的讲解、代码和保存输出，最后自己运行和改动实验。
+这里按节提供目前开放的 **第 0～9 节课程资料**。每节先看 PDF 课件，再按实践编号阅读 Notebook 中的讲解、代码和保存输出，最后自己运行和改动实验。
 
 | 节次 | 学习说明 | 课件 | 实践 Notebook |
 | --- | --- | --- | --- |
@@ -13,14 +13,15 @@
 | 06 | [Harness 与持续任务运行](06%20Harness%20%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C/%E5%AD%A6%E4%B9%A0%E8%AF%B4%E6%98%8E.md) | [PDF](06%20Harness%20%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C/%E8%AF%BE%E4%BB%B6/L06-Harness%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C.pdf) | [06A](06%20Harness%20%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C/Notebook/01-state-and-context.ipynb)、[06B](06%20Harness%20%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C/Notebook/02-interrupt-and-resume.ipynb)、[06C](06%20Harness%20%E4%B8%8E%E6%8C%81%E7%BB%AD%E4%BB%BB%E5%8A%A1%E8%BF%90%E8%A1%8C/Notebook/03-trace-and-live-run.ipynb) |
 | 07 | [智能体评估与对照实验](07%20%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C/%E5%AD%A6%E4%B9%A0%E8%AF%B4%E6%98%8E.md) | [PDF](07%20%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C/%E8%AF%BE%E4%BB%B6/L07-%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.pdf) | [07A](07%20%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C/Notebook/01-tasks-and-graders.ipynb)、[07B](07%20%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C/Notebook/02-metrics-and-benchmarks.ipynb)、[07C](07%20%E6%99%BA%E8%83%BD%E4%BD%93%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C/Notebook/03-controlled-comparison.ipynb) |
 | 08 | [综合实践一 资料与仓库导读](08%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%20%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB/%E5%AD%A6%E4%B9%A0%E8%AF%B4%E6%98%8E.md) | [PDF](08%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%20%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB/%E8%AF%BE%E4%BB%B6/L08-%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB.pdf) | [08A](08%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%20%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB/Notebook/01-source-map.ipynb)、[08B](08%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%20%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB/Notebook/02-guided-learning.ipynb)、[08C](08%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%B8%80%20%E8%B5%84%E6%96%99%E4%B8%8E%E4%BB%93%E5%BA%93%E5%AF%BC%E8%AF%BB/Notebook/03-hello-agents-input.ipynb) |
+| 09 | [综合实践二 练习反馈与跨仓库迁移](09%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%20%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB/%E5%AD%A6%E4%B9%A0%E8%AF%B4%E6%98%8E.md) | [PDF](09%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%20%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB/%E8%AF%BE%E4%BB%B6/L09-%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB.pdf) | [09A](09%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%20%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB/Notebook/01-exercise-feedback.ipynb)、[09B](09%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%20%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB/Notebook/02-hints-and-memory.ipynb)、[09C](09%20%E7%BB%BC%E5%90%88%E5%AE%9E%E8%B7%B5%E4%BA%8C%20%E7%BB%83%E4%B9%A0%E5%8F%8D%E9%A6%88%E4%B8%8E%E8%B7%A8%E4%BB%93%E5%BA%93%E8%BF%81%E7%A7%BB/Notebook/03-transfer-and-review.ipynb) |
 
 ## 下载
 
-在仓库页面点击 **Code → Download ZIP**，解压后保留九个节目录及根目录文件。也可以使用 `git clone`。单独下载一本 Notebook 时，源码和数据路径可能无法解析。
+在仓库页面点击 **Code → Download ZIP**，解压后保留十个节目录及根目录文件。也可以使用 `git clone`。单独下载一本 Notebook 时，源码和数据路径可能无法解析。
 
 ## 环境与运行
 
-建议使用 Python 3.12。第 1 节需要 PyTorch 和 Matplotlib；第 2 节离线部分只用 Python 标准库；第 3 节的 03B 需要 NumPy；第 4 节的 04B 需要 pandas；第 5 节还需安装 MCP、PyYAML 与 jsonschema 依赖；第 6 节继续使用这些模块，并使用 pandas 整理事件记录；第 7 节的 07C 还需 SciPy 计算小样本区间与检验；第 8 节另需 pypdf 和 NetworkX。各节 Notebook 都可用 JupyterLab 打开。PyTorch 安装包因系统而异，请先按 [PyTorch 官方安装说明](https://pytorch.org/get-started/locally/) 选择适合本机的命令。
+建议使用 Python 3.12。第 1 节需要 PyTorch 和 Matplotlib；第 2 节离线部分只用 Python 标准库；第 3 节的 03B 需要 NumPy；第 4 节的 04B 需要 pandas；第 5 节还需安装 MCP、PyYAML 与 jsonschema 依赖；第 6 节继续使用这些模块，并使用 pandas 整理事件记录；第 7 节的 07C 还需 SciPy 计算小样本区间与检验；第 8 节另需 pypdf 和 NetworkX；第 9 节 09B 还需 Pydantic。各节 Notebook 都可用 JupyterLab 打开。PyTorch 安装包因系统而异，请先按 [PyTorch 官方安装说明](https://pytorch.org/get-started/locally/) 选择适合本机的命令。
 
 在资料根目录创建虚拟环境并安装 JupyterLab 和 Matplotlib：
 
@@ -92,17 +93,27 @@ macOS / Linux 将解释器路径换成 `./.venv/bin/python`。
 
 macOS / Linux 将解释器路径换成 `./.venv/bin/python`。
 
+## 第 9 节额外依赖
+
+第 9 节 09B 使用 Pydantic。从资料根目录运行：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r "09 综合实践二 练习反馈与跨仓库迁移/requirements.txt"
+```
+
+macOS / Linux 将解释器路径换成 `./.venv/bin/python`。
+
 ## 真实模型请求
 
-第 2 节 02C、第 3 节 03C、第 4 节 04B 和第 5 节 05C 的 Notebook 默认 `RUN_LIVE = False`；第 6 节 Notebook 只运行教学回放、只读工具和历史记录；第 7 节 Notebook 读取历史评估并在本地计算指标；第 8 节 Notebook 默认只读课程自编示例和历史观测。直接离线运行这些 Notebook 不会发起 DeepSeek 请求。要尝试真实请求，请自行设置 `DEEPSEEK_API_KEY`；若当前账号不支持 Notebook 中的默认模型，再设置 `DEEPSEEK_MODEL` 为账号可用的模型。开启前先了解服务费用和资料发送范围。第 6 节命令行程序需显式指定 `--mode deepseek`；第 7 节的两份真实评估脚本需显式指定 `--live`；第 8 节命令行导读需显式指定 `--mode deepseek`，才会尝试请求模型。密钥只放在本机环境变量中，不写入 Notebook 或提交到仓库。
+第 2 节 02C、第 3 节 03C、第 4 节 04B 和第 5 节 05C 的 Notebook 默认 `RUN_LIVE = False`；第 6 节 Notebook 只运行教学回放、只读工具和历史记录；第 7 节 Notebook 读取历史评估并在本地计算指标；第 8 节 Notebook 默认只读课程自编示例和历史观测；第 9 节 Notebook 在本机运行课程小练习并读取历史反馈。直接离线运行这些 Notebook 不会发起 DeepSeek 请求。要尝试真实请求，请自行设置 `DEEPSEEK_API_KEY`；若当前账号不支持 Notebook 中的默认模型，再设置 `DEEPSEEK_MODEL` 为账号可用的模型。开启前先了解服务费用和资料发送范围。第 6 节命令行程序需显式指定 `--mode deepseek`；第 7 节的两份真实评估脚本需显式指定 `--live`；第 8 节命令行导读需显式指定 `--mode deepseek`，才会尝试请求模型。密钥只放在本机环境变量中，不写入 Notebook 或提交到仓库。
 
 Notebook 中保存的输出便于对照。第 6 节的离线单元已在学生版重新运行；其中读取的真实模型记录仍只代表历史运行，不表示当前模型服务一定给出相同回答。
 
 ## 目录
 
-每节直接包含 `课件/`、`Notebook/`，实践节另有 `代码/` 和 `数据/`。`代码/` 是 Notebook 调用的 Python 源文件；`Notebook/` 是可运行讲义。第 3～7 节 `数据/实验记录/` 与第 8 节 `代码/学习助手/results/` 提供离线实验所需的历史观测输入，不是练习答案。根目录 [资料来源](%E8%B5%84%E6%96%99%E6%9D%A5%E6%BA%90.md)列出本阶段使用的主要文档与实现来源。
+每节直接包含 `课件/`、`Notebook/`，实践节另有 `代码/` 和 `数据/`。`代码/` 是 Notebook 调用的 Python 源文件；`Notebook/` 是可运行讲义。第 3～7 节的 `数据/实验记录/`、第 8 节的 `代码/学习助手/results/` 和第 9 节的 `代码/学习反馈/results/` 提供离线实验所需的历史观测输入，不是练习答案。根目录 [资料来源](%E8%B5%84%E6%96%99%E6%9D%A5%E6%BA%90.md)列出本阶段使用的主要文档与实现来源。
 
-第 6 节 Harness 场景设计作业在教学平台发布；课程后续节次会逐步加入。
+第 6 节 Harness 场景设计作业与期末综合作业均在教学平台发布；课程后续节次会逐步加入。
 
 ## 许可
 
